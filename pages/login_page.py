@@ -20,7 +20,7 @@ class LoginPage:
         with allure.step(f"Typing username [{username}]"):
             self.__username_locator.press_sequentially(username,delay = ddelay)
 
-    def type_password(self, password: str):
+    def type_password(self, password=""):
         with allure.step(f"Typing password [{password}]"):
             self.__password_locator.fill(password)
 

@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 from pages.login_page import LoginPage
 
-def test_example1(page: Page) -> None:
+def test_lockedout_user(page: Page) -> None:
     login_page = LoginPage(page)
     login_page.navigate()
     login_page.login_credentials_visible()
@@ -10,11 +10,38 @@ def test_example1(page: Page) -> None:
     login_page.click_login()
     login_page.expect_error_msg("Epic sadface: Sorry, this user has been locked out.")
 
-def test_example2(page: Page) -> None:
-    page.goto("https://www.saucedemo.com/")
-    expect(page.locator("[data-test=\"login-credentials\"]")).to_be_visible()
+def test_invalid_user(page: Page) -> None:
+    login_page = LoginPage(page)
+    login_page.navigate()
+    login_page.login_credentials_visible()
+    login_page.type_username("invalid_user")
+    login_page.type_password("secret_pswd")
+    login_page.click_login()
+    login_page.expect_error_msg("Epic sadface: Username and password do not match any user in this service")
 
-    page.locator("[data-test=\"username\"]").press_sequentially("invalid_user",delay=200)
-    page.locator("[data-test=\"password\"]").fill("secret_saucefas")
-    page.locator("[data-test=\"login-button\"]").click()
-    expect(page.locator("[data-test=\"error\"]")).to_contain_text("Epic sadface: Username and password do not match any user in this service")
+def test_invalid_password(page: Page) -> None:
+    login_page = LoginPage(page)
+    login_page.navigate()
+    login_page.login_credentials_visible()
+    login_page.type_username("performance_glitch_user")
+    login_page.type_password("bad_pswd")
+    login_page.click_login()
+    login_page.expect_error_msg("Epic sadface: Username and password do not match any user in this service")
+
+def test_empty_user(page: Page) -> None:
+    login_page = LoginPage(page)
+    login_page.navigate()
+    login_page.login_credentials_visible()
+    login_page.type_username("")
+    login_page.type_password("secret_pswd")
+    login_page.click_login()
+    login_page.expect_error_msg("Epic sadface: Username is required")
+
+def test_empty_password(page: Page) -> None:
+    login_page = LoginPage(page)
+    login_page.navigate()
+    login_page.login_credentials_visible()
+    login_page.type_username("user")
+    login_page.type_password()
+    login_page.click_login()
+    login_page.expect_error_msg("Epic sadface: Password is required")
