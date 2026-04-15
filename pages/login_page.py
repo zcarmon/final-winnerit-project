@@ -1,3 +1,4 @@
+import allure
 from playwright.sync_api import Page, expect
 
 class LoginPage:
@@ -12,20 +13,26 @@ class LoginPage:
 
 # # Methods
     def navigate(self, url = "https://www.saucedemo.com/"):
-        self.__page.goto(url)
+        with allure.step("Navigate to " + url):
+            self.__page.goto(url)
 
     def type_username(self, username: str, ddelay = 100):
-        self.__username_locator.press_sequentially(username,delay = ddelay)
+        with allure.step(f"Typing username [{username}]"):
+            self.__username_locator.press_sequentially(username,delay = ddelay)
 
     def type_password(self, password: str):
-        self.__password_locator.fill(password)
+        with allure.step(f"Typing password [{password}]"):
+            self.__password_locator.fill(password)
 
     def click_login(self):
-        self.__login_button_locator.click()
+        with allure.step("Login to saucedemo"):
+            self.__login_button_locator.click()
 
 # # Assertions
     def expect_error_msg(self, error_message: str):
-        expect(self.__error_message).to_contain_text(error_message)
+        with allure.step(f"Error message [{error_message}]"):
+            expect(self.__error_message).to_contain_text(error_message)
 
     def login_credentials_visible(self):
-        expect(self.__login_credential).to_be_visible()
+        with allure.step("Login credentials"):
+            expect(self.__login_credential).to_be_visible()
