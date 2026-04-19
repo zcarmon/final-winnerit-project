@@ -32,4 +32,6 @@ jobs:
       run: python -m playwright install --with-deps
 
     - name: Run Tests
+      env:
+        X_API_KEY: $${{ secrets.X_API_KEY }}
       run: pytest
