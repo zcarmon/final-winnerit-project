@@ -33,5 +33,5 @@ jobs:
 
     - name: Run Tests
       env:
-        X_API_KEY: $${{ secrets.X_API_KEY }}
+        X_API_KEY: ${{ secrets.X_API_KEY }}
       run: pytest
